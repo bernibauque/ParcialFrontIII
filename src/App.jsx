@@ -1,35 +1,64 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Card from './components/Card'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [name, setName] = useState('');
+  const [color, setColor] = useState('');
+  const [showCard, setShowCard] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (name.trim().length < 3 || /^\s/.test(name)) {
+      setError('Por favor, ingresa un nombre válido.');
+      setShowCard(false);
+      return;
+    }
+
+    if (color.trim().length < 6) {
+      setError('Por favor, ingresa un color favorito válido.');
+      setShowCard(false);
+      return;
+    }
+
+    setError('');
+    setShowCard(true);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="app">
+      <h2>Formulario - Color Favorito</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="nameInput">Nombre:</label>
+        <input
+          type="text"
+          id="nameInput"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        /><br/><br/>
 
-export default App
+        <label htmlFor="colorInput">Color Favorito:</label>
+        <input
+          type="text"
+          id="colorInput"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          required
+        /><br/><br/>
+
+        <button type="submit">Enviar</button>
+      </form>
+
+      {error && <div className="error">{error}</div>}
+      {showCard && <Card name={name} color={color} />}
+    </div>
+  );
+};
+
+export default App;
+
+
+
